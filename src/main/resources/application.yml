@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: accountBook
+  profiles:
+    active: mysql
+
+
+ssafys:
+  api:
+    managerId : "dnjsdud9718@naver.com"
+    apiKey : "acc7fdf74f8b4dd2820df5ec83510998"
+    institutionCode : "00100"
+    fintechAppNo : "001"
+    url : "https://finopenapi.ssafy.io/ssafy/api/v1"
+    endEmail : "@dongGE203.com"
+  admin:
+    userKey: "f8fef7ab-71e7-479a-a98e-a48e6b36a4bb"
+    account: "0010942783338668"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    hikari:
+#      jdbc-url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      jdbc-url: jdbc:h2:tcp://localhost/~/dong
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+#      jdbc-url: jdbc:h2:tcp://localhost/~/springbatch
+
+  batch:
+    job:
+      enabled: true
+      name: ${job.name:NONE}
+#      name: gameJob
+    jdbc:
+      initialize-schema: always
+
+  jpa:
+    #    hibernate:
+    #      ddl-auto: create
+    properties:
+      hibernate:
+#        #        show_sql: true # System.out?? ???.
+        format_sql: true
+##        default_batch_fetch_size: 4
+
+##############
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    hikari:
+      jdbc-url: ${SPRING_DATASOURCE_URL}?useUnicode=true&characterEncoding=utf8
+      username: ${SPRING_DATASOURCE_USERNAME}
+      password: ${SPRING_DATASOURCE_PASSWORD}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      name: ${job.name:NONE}
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+
+---
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
